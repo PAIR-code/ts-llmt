@@ -20,6 +20,21 @@ To run unit tests:
 
 Running `npm test` will invoke `test:dev`.
 
+## Linting
+
+This project uses [ESLint](https://eslint.org/) to enforce code style. To run:
+
+```sh
+npm run lint
+```
+
+If there are no lint errors, the command will produce no output.
+
+NOTE: If you're using Visual Stuido Code with the official [Microsoft ESLint
+extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint),
+you'll have to switch to the Pre-Release version for it to be able to find and
+use the `eslint.config.mjs` file.
+
 ## Checking Licenses
 
 Source code for this library is released under the [Apache 2.0
