@@ -1,0 +1,44 @@
+# Dev workflow. Performs checks but does NOT release.
+# Intended to be run on any pushed development branch (not main).
+
+name: Dev branch checks
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # To publish a GitHub release.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts/*"
+      - name: Install dependencies
+        run: npm clean-install
+      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+        run: npm audit signatures
+      - name: Check code style
+        run: npm run prettier:check
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test:ci
+      - name: Clean dist/
+        run: npm run clean
+      - name: Build
+        run: npm run build
+      - name: Check license headers
+        uses: viperproject/check-license-header@v2
+        with:
+          path: "./"
+          config: "./.github/license-check/license-config.json"
+          strict: true
