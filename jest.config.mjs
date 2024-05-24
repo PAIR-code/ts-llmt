@@ -5,7 +5,7 @@
  * @fileoverview Jest configuration.
  */
 
-module.exports = {
+export default {
   coverageReporters: ["clover", "json", "lcov", ["text", { skipFull: true }]],
   testEnvironment: "node",
   testRegex: "/(src|test)/.*\\.(spec|test)?\\.(ts|tsx)$",
