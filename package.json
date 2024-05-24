@@ -4,7 +4,10 @@
   "description": "Experimental TypeScript support for Large Language Model Templates",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "build:dry-run": "tsc --noEmit",
     "check-licenses": "check-license-header check --config .github/license-check/license-config.json --strict",
+    "clean": "rimraf ./dist && mkdir dist",
     "lint": "eslint .",
     "prettier:check": "prettier --check '**/*.{js,ts}'",
     "prettier:write": "prettier --write '**/*.{js,ts}'",
@@ -21,6 +24,7 @@
     "url": "https://github.com/PAIR-code/ts-llmt/issues"
   },
   "files": [
+    "./dist/**",
     "./src/**"
   ],
   "keywords": [
@@ -41,6 +45,7 @@
     "check-license-header": "github:viperproject/check-license-header#v2",
     "eslint": "8.57.0",
     "prettier": "3.2.5",
+    "rimraf": "5.0.7",
     "ts-jest": "29.1.3",
     "typescript": "5.4.5",
     "typescript-eslint": "7.10.0",
