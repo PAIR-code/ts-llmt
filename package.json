@@ -1,0 +1,21 @@
+{
+  "name": "ts-llmt",
+  "version": "1.0.0",
+  "description": "Experimental TypeScript support for Large Language Model Templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PAIR-code/ts-llmt.git"
+  },
+  "files": [
+    "./src/**"
+  ],
+  "keywords": [
+    "llm"
+  ],
+  "author": "",
+  "license": "Apache-2.0"
+}
