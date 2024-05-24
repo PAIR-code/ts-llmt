@@ -35,6 +35,19 @@ extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-e
 you'll have to switch to the Pre-Release version for it to be able to find and
 use the `eslint.config.mjs` file.
 
+## Checking Code Style
+
+This project defines and checks code style with
+[Prettier](https://prettier.io/). Invoke Prettier from the command line via the
+following:
+
+- `npm run prettier:check` - Check _.js and _.ts files for style conformance.
+- `npm run prettier:write` - Overwrite files with Prettier applied style.
+
+NOTE: If you're using Visual Studio Code, the [Prettier
+extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+will apply code style on save.
+
 ## Checking Licenses
 
 Source code for this library is released under the [Apache 2.0
@@ -50,3 +63,6 @@ include an [SPDX](https://spdx.dev/) license header like this:
 To check whether all source files have such a header, run `npm run
 check-licenses`. The output will tell you if there are any files missing the
 header.
+
+The full text of the Apache-2.0 license is available in the accompanying
+`LICENSE` file.
