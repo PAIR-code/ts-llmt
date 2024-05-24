@@ -10,7 +10,7 @@
 An class to wrap, and provide a common interface for LLM behaviour.
 */
 
-import { ErrorResponse, isErrorResponse } from "../simple-errors/simple-errors";
+import { ErrorResponse, isErrorResponse } from "./simple_errors";
 import { Template, matchTemplate } from "./template";
 
 export interface PredictResponse {
@@ -33,7 +33,10 @@ export interface ScoreResponse {
 export abstract class LLM<Params extends {}> {
   public abstract name: string;
 
-  abstract predict(prompt: string, params?: Params): Promise<PredictResponse | ErrorResponse>;
+  abstract predict(
+    prompt: string,
+    params?: Params
+  ): Promise<PredictResponse | ErrorResponse>;
   // abstract score(request: ScoreRequest): Promise<ScoreResponse>;
 }
 
@@ -43,15 +46,15 @@ export abstract class LLM<Params extends {}> {
 //
 // TODO: maybe good to provide a version that takes the same query and gives difference responses each time, e.g. using a random seed at constructor time.
 export class LookupTableFakeLLM implements LLM<{}> {
-  public name: string = 'fake: in memory lookup table';
+  public name: string = "fake: in memory lookup table";
 
-  constructor(public table: { [query: string]: ScoreResponse }) { }
+  constructor(public table: { [query: string]: ScoreResponse }) {}
 
   async predict(query: string): Promise<PredictResponse> {
-    const scoreResponse = this.table[query]
+    const scoreResponse = this.table[query];
     if (scoreResponse) {
       const predictResponse: PredictResponse = {
-        completions: scoreResponse.scoredCompletions.map(c => c.completion)
+        completions: scoreResponse.scoredCompletions.map((c) => c.completion),
       };
       return predictResponse;
     }
@@ -59,20 +62,22 @@ export class LookupTableFakeLLM implements LLM<{}> {
     // return { queryCompletions: [] }
   }
   async score(request: ScoreRequest): Promise<ScoreResponse> {
-    const scoreResponse: ScoreResponse = this.table[request.query]
+    const scoreResponse: ScoreResponse = this.table[request.query];
     if (scoreResponse) {
       return scoreResponse;
     }
-    return { scoredCompletions: [] }
+    return { scoredCompletions: [] };
   }
 }
 
 export interface InterpretedResponse<Ns extends string> {
-  substs?: { [Key in Ns]: string }, responseStr: string
-};
+  substs?: { [Key in Ns]: string };
+  responseStr: string;
+}
 
 export async function fillTemplate<Ns extends string>(
-  llm: LLM<{}>, template: Template<Ns>
+  llm: LLM<{}>,
+  template: Template<Ns>
 ): Promise<InterpretedResponse<Ns>[] | ErrorResponse> {
   const interpretedResponses = [] as InterpretedResponse<Ns>[];
   // const substsResponses: ({ [Key in Ns]: string } | null)[] = [];
@@ -86,11 +91,13 @@ export async function fillTemplate<Ns extends string>(
     // console.log('parts', parts);
     // console.log('qcompletion.completion', completion);
     const match = matchTemplate(parts, completion, false);
-    const interpretedResponse = { responseStr: completion } as InterpretedResponse<Ns>;
+    const interpretedResponse = {
+      responseStr: completion,
+    } as InterpretedResponse<Ns>;
     if (match) {
       interpretedResponse.substs = match.substs;
     }
-    interpretedResponses.push(interpretedResponse)
+    interpretedResponses.push(interpretedResponse);
   }
   return interpretedResponses;
 }
