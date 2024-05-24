@@ -1,10 +1,6 @@
-/*==============================================================================
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an Apache2 license that can be
- * found in the LICENSE file and http://www.apache.org/licenses/LICENSE-2.0
-==============================================================================*/
+/**
+ * @license SPDX-License-Identifier: Apache-2.0
+ */
 
 /* Test call makersuite.google.com developer API for Palm2 LLM.
 
@@ -21,16 +17,15 @@ https://makersuite.google.com/app/apikey
 Note: this will only work from IP addresses in supported countries.
 
 */
-import { sendPalm2Request, preparePalm2Request } from '../llm_devapi_palm2';
+import { sendPalm2Request, preparePalm2Request } from "../llm_devapi_palm2";
 
-import * as yargs from 'yargs';
+import * as yargs from "yargs";
 
 interface Params {
   apiKey: string;
 }
 
 async function run(args: Params): Promise<void> {
-
   const prompt = `
 The following are short movie summaries. They are specific, not generic (no movie is  just "a classic"), and they don't contain plot synopsis. They just describe my experience of the movie.
 
@@ -52,18 +47,20 @@ summary: ['
 
 // ----------------------------------------------------------------------------
 const args = yargs
-  .option('apiKey', {
-    describe: 'The API Key from MakerSuite UI. See: '
-      + 'https://makersuite.google.com/app/apikey',
+  .option("apiKey", {
+    describe:
+      "The API Key from MakerSuite UI. See: " +
+      "https://makersuite.google.com/app/apikey",
     demandOption: true,
-    type: 'string',
-  }).help().argv;
+    type: "string",
+  })
+  .help().argv;
 
 run(args as Params)
   .then(() => {
-    console.log('Success!');
+    console.log("Success!");
   })
-  .catch(e => {
-    console.error('Failed: ', e);
-    throw Error('Failed');
+  .catch((e) => {
+    console.error("Failed: ", e);
+    throw Error("Failed");
   });
