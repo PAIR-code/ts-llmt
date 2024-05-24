@@ -18,12 +18,11 @@ Assumes that you have run:
   gcloud config set project ${YOUR_GOOGLE_CLOUD_PROJECT_ID}
 */
 import { VertexPalm2LLM } from "../llm_vertexapi_palm2";
-import { FewShotTemplate } from "../fewshot_template";
-import { expInterpTempl } from "../../recommender-prompts/item-interpreter";
+import { expInterpTempl } from "../recommender_prompts/item_interpreter";
 
 import * as yargs from "yargs";
-import { nv, template } from "../template";
 import { fillTemplate } from "../llm";
+import { ErrorResponse } from "../simple_errors";
 
 interface Params {
   accessToken: string;
@@ -36,7 +35,17 @@ async function run(args: Params): Promise<void> {
   const templateToFill = expInterpTempl.substs({ experience: args.experience });
   console.log("template: \n\n", templateToFill.escaped);
   console.log("\n\n");
-  const responses = await fillTemplate(llm, templateToFill);
+  const responsesOrError = await fillTemplate(llm, templateToFill);
+
+  if ("error" in responsesOrError) {
+    throw responsesOrError;
+  }
+
+  const responses = responsesOrError as Exclude<
+    typeof responsesOrError,
+    ErrorResponse
+  >;
+
   const badlyFormedResponsesCount = responses.filter((r) => !r.substs).length;
   console.log(`badlyFormedResponses count: ${badlyFormedResponsesCount}`);
   console.log(`responses: ${JSON.stringify(responses, null, 2)} `);

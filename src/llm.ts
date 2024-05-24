@@ -26,7 +26,7 @@ export interface ScoreResponse {
   scoredCompletions: ScoredCompletion[];
 }
 
-export abstract class LLM<Params extends {}> {
+export abstract class LLM<Params extends object> {
   public abstract name: string;
 
   abstract predict(
@@ -41,7 +41,7 @@ export abstract class LLM<Params extends {}> {
 // completions.
 //
 // TODO: maybe good to provide a version that takes the same query and gives difference responses each time, e.g. using a random seed at constructor time.
-export class LookupTableFakeLLM implements LLM<{}> {
+export class LookupTableFakeLLM implements LLM<object> {
   public name: string = "fake: in memory lookup table";
 
   constructor(public table: { [query: string]: ScoreResponse }) {}
@@ -72,7 +72,7 @@ export interface InterpretedResponse<Ns extends string> {
 }
 
 export async function fillTemplate<Ns extends string>(
-  llm: LLM<{}>,
+  llm: LLM<object>,
   template: Template<Ns>
 ): Promise<InterpretedResponse<Ns>[] | ErrorResponse> {
   const interpretedResponses = [] as InterpretedResponse<Ns>[];

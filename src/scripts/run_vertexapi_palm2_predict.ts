@@ -23,6 +23,7 @@ import { FewShotTemplate } from "../fewshot_template";
 import * as yargs from "yargs";
 import { nv, template } from "../template";
 import { fillTemplate } from "../llm";
+import { ErrorResponse } from "../simple_errors";
 
 interface Params {
   accessToken: string;
@@ -79,7 +80,17 @@ synopsis: '${nv("synopsis")}'`;
 
   const llm = new VertexPalm2LLM(args.project, args.accessToken);
   const templateToFill = t.substs({ movie: args.movie });
-  const responses = await fillTemplate(llm, templateToFill);
+  const responsesOrError = await fillTemplate(llm, templateToFill);
+
+  if ("error" in responsesOrError) {
+    throw responsesOrError;
+  }
+
+  const responses = responsesOrError as Exclude<
+    typeof responsesOrError,
+    ErrorResponse
+  >;
+
   const badlyFormedResponsesCount = responses.filter((r) => !r.substs).length;
   console.log(`badlyFormedResponses count: ${badlyFormedResponsesCount}`);
   console.log(`responses: ${JSON.stringify(responses, null, 2)} `);

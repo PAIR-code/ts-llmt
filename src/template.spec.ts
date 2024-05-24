@@ -30,7 +30,7 @@ describe("template", () => {
     // subparams of vars are 'thing' or 'thing2'; those are the only variables
     // in the template, and are auto-completed, and anything else is an 'as you
     // type' type error.
-    let whatIsTabletoB = whatIsAtoB.vars.thing.substStr("table");
+    const whatIsTabletoB = whatIsAtoB.vars.thing.substStr("table");
     expect(whatIsTabletoB.escaped).toEqual("what is a table to {{thing2}}?");
 
     // You can also reference the var names directly using a template's
@@ -145,6 +145,7 @@ describe("template", () => {
     // auto-completed, and errors are checked as you type.
     //  e.g. first argument is auto-completed to 'thing' or 'thing2'.
     const p2 = p.vars.thing.substStr("table");
+    expect(p2).toBeDefined();
   });
 
   it("escaping", () => {
@@ -275,10 +276,13 @@ describe("template", () => {
     const thingVar = nv("thing");
     const thing2Var = nv("thing2");
     const p = template`what is a ${thingVar} to ${thing2Var}?`;
+    expect(p).toBeDefined();
 
     const bigThingVar = nv("bigThing");
     const p2 = template`big ${bigThingVar}`;
     const p4 = template`foo ${bigThingVar}, bar ${thingVar}, and ${thing2Var}`;
+    expect(p2).toBeDefined();
+    expect(p4).toBeDefined();
 
     // BUG, the following line produces this error:
     /*

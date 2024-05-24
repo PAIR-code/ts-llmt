@@ -308,7 +308,7 @@ export class TemplVar<Ns extends string, N extends Ns> {
 
 export class ExtraVarError extends Error {}
 
-const VAR_REGEXP = /\{\{(?<name>[^(\}\})]*)\}\}/g;
+const VAR_REGEXP = /\{\{(?<name>[^(}})]*)\}\}/g;
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -486,7 +486,7 @@ type TemplateArgName<T> = T extends
  */
 export function template<
   // Hs extends string
-  Args extends (NamedVar<any> | Template<any> | string)[]
+  Args extends (NamedVar<string> | Template<string> | string)[]
 >(
   strings: TemplateStringsArray,
   // ...args: TemplateArg[]
@@ -500,7 +500,7 @@ Template<TemplateArgName<(typeof args)[number]>> {
     }
     if (a instanceof Template) {
       a.varList().forEach((v) =>
-        varSet.add(v as TemplateArgName<(typeof args)[number]>)
+        varSet.add(v as unknown as TemplateArgName<(typeof args)[number]>)
       );
     }
     // TODO: support raw strings?
@@ -508,7 +508,7 @@ Template<TemplateArgName<(typeof args)[number]>> {
     //   varSet.add(a)
     // }
     else if (a instanceof NamedVar) {
-      varSet.add(a as TemplateArgName<(typeof args)[number]>);
+      varSet.add(a as unknown as TemplateArgName<(typeof args)[number]>);
     }
   });
 
@@ -529,6 +529,6 @@ Template<TemplateArgName<(typeof args)[number]>> {
         );
       })
       .join(""),
-    [...varSet]
+    [...varSet] as unknown as NamedVar<TemplateArgName<Args[number]>>[]
   );
 }

@@ -6,7 +6,7 @@
 An class to wrap, and provide a common interface for LLM behaviour.
 */
 import { LLM, PredictResponse } from "./llm";
-import { ErrorResponse } from "../simple-errors/simple-errors";
+import { ErrorResponse } from "./simple_errors";
 
 export interface LlmOptions {
   modelId?: string; // e.g. text-bison
@@ -30,7 +30,6 @@ async function sendLlmRequest(
   const response = await fetch(`/api/llm`, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin
-    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
     credentials: "same-origin", // include, *same-origin, omit
     headers: {
       "Content-Type": "application/json",

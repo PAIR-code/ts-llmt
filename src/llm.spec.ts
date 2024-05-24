@@ -7,18 +7,13 @@ Showing how the LLM class works...
 */
 
 import { assertNoErrorResponse, ErrorResponse } from "./simple_errors";
-import {
-  InterpretedResponse,
-  LookupTableFakeLLM,
-  ScoreResponse,
-  fillTemplate,
-} from "./llm";
+import { LookupTableFakeLLM, ScoreResponse, fillTemplate } from "./llm";
 import { Palm2Response } from "./llm_vertexapi_palm2";
 import { nv, template } from "./template";
 
 describe("llm", () => {
   let fakeLLM: LookupTableFakeLLM;
-  let stopString = `']`;
+  const stopString = `']`;
 
   beforeEach(() => {
     // ----------------------------------------------------------------------------

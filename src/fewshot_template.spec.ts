@@ -2,16 +2,7 @@
  * @license SPDX-License-Identifier: Apache-2.0
  */
 
-import { flatten } from "underscore";
-import {
-  Template,
-  escapeStr,
-  template,
-  nv,
-  unEscapeStr,
-  matchTemplate,
-} from "./template";
-import { NamedVar } from "./variable";
+import { Template, template, nv, matchTemplate } from "./template";
 import { FewShotTemplate, matchFewShotTemplate } from "./fewshot_template";
 
 // // ----------------------------------------------------------------------------
@@ -122,7 +113,7 @@ Evaluation: "{{evaluation}}"`
     const nCriticExamplesTempl = new FewShotTemplate(movieRecEvalTempl, "\n\n");
 
     // ----------------------------------------------------------------------------
-    // Tenplates can contain other templates inline also.
+    // Templates can contain other templates inline also.
     const criticTempl = template`Given the following criteria for movie recommendations:
 ${nv("Constitution")}
 
@@ -131,7 +122,7 @@ If the review is ok, the evaluation should just be "ok".
 
 ${nv("fewShotCriticExamples")}
 
-${movieRecTempl}
+${movieRecTempl as Template<string>}
 Evaluation: "`;
 
     const criticWithConstitutionAndExamples = criticTempl.substs({

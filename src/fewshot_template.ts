@@ -21,10 +21,6 @@ See the test file (.spec) for more detailed examples.
 import { flatten } from "underscore";
 import {
   Template,
-  escapeStr,
-  template,
-  nv,
-  unEscapeStr,
   matchTemplate,
   TemplateMatch,
   escapeStringInMatch,
@@ -94,14 +90,3 @@ export function matchFewShotTemplate<Ns extends string>(
   }
   return matches;
 }
-
-function apply2<Ns extends string, Ms extends Ns>(
-  a: Set<Ns>,
-  bmap: { [Key in Ms]: string }[]
-): Set<Exclude<Ns, Ms>> {
-  const a2 = new Set<Exclude<Ns, Ms>>(a as any);
-  Object.keys(bmap).forEach((n) => a2.delete(n as any));
-  return a2;
-}
-
-const r2 = apply2(new Set(["a", "b", "c"]), [{ a: "a", b: "b" }]);
