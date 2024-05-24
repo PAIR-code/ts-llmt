@@ -133,7 +133,10 @@ export class VertexPalm2LLM implements LLM<Palm2ApiOptions> {
     },
   };
 
-  constructor(public projectId: string, public accessToken: string) {
+  constructor(
+    public projectId: string,
+    public accessToken: string
+  ) {
     this.name = `VertexLLM:` + this.defaultOptions.modelId;
   }
 

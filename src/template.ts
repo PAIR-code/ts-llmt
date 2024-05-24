@@ -237,7 +237,10 @@ type NameToVarMap<Ns extends string> = { [Key in Ns]: TemplVar<Ns, Key> };
 // N = This variable name.
 // TODO: consider this being a subclass of NamedVar...
 export class TemplVar<Ns extends string, N extends Ns> {
-  constructor(public template: Template<Ns>, public rawVariable: NamedVar<N>) {
+  constructor(
+    public template: Template<Ns>,
+    public rawVariable: NamedVar<N>
+  ) {
     if (!rawVariable.occurs(template.escaped)) {
       console.error(
         `Template is missing a variable.\n` +
@@ -315,7 +318,10 @@ const VAR_REGEXP = /\{\{(?<name>[^(}})]*)\}\}/g;
 export class Template<Ns extends string> {
   public vars: NameToVarMap<Ns>;
 
-  constructor(public escaped: string, vars: NamedVar<Ns>[]) {
+  constructor(
+    public escaped: string,
+    vars: NamedVar<Ns>[]
+  ) {
     const varsNamesInTemplate = [...escaped.matchAll(VAR_REGEXP)].map(
       (m) => m.groups!["name"]
     );
@@ -486,7 +492,7 @@ type TemplateArgName<T> = T extends
  */
 export function template<
   // Hs extends string
-  Args extends (NamedVar<string> | Template<string> | string)[]
+  Args extends (NamedVar<string> | Template<string> | string)[],
 >(
   strings: TemplateStringsArray,
   // ...args: TemplateArg[]
@@ -524,8 +530,8 @@ Template<TemplateArgName<(typeof args)[number]>> {
           (a instanceof Template
             ? a.escaped
             : a instanceof String || typeof a === "string"
-            ? a
-            : (a as NamedVar<string>).literal)
+              ? a
+              : (a as NamedVar<string>).literal)
         );
       })
       .join(""),

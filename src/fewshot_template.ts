@@ -49,7 +49,10 @@ export function fewShotSubst<N extends string, M extends N, N2s extends string>(
 
 // A class representing a few shot template.
 export class FewShotTemplate<Ns extends string> {
-  constructor(public template: Template<Ns>, public joinStr: string) {}
+  constructor(
+    public template: Template<Ns>,
+    public joinStr: string
+  ) {}
 
   apply<Ms extends Ns, VarNs extends never>(
     examples: { [Key in Ms]: string }[]
