@@ -8,19 +8,27 @@ template.
 For example:
 
 ```ts
-const thingVar = nv("thing");
-const thing2Var = nv("thing2");
+const thingVar = nv('thing');
+const thing2Var = nv('thing2');
 const whatIsAtoB = template`what is a ${thingVar} to ${thing2Var}?`;
 
-const whatIsTabletoB = whatIsAtoB.vars.thing.substStr("table");
+const whatIsTabletoB = whatIsAtoB.vars.thing.substStr('table');
 
-expect(whatIsTabletoB.escaped).toEqual("what is a table to {{thing2}}?");
+expect(whatIsTabletoB.escaped).toEqual('what is a table to {{thing2}}?');
 ```
 
 A nice feature of this is that you get as "as-you-type" error checking, and
 arguments can be auto-completed by the IDE. e.g. you can directly reference the
 variables from the 'vars' parameter of a template, and anything else is an
 as-you-type error in your editor.
+
+You can do multi-variable replacement nicely, and still have all the wonderful
+type-checking like so:
+
+```ts
+whatIsAtoB.substs({ thing: 'table', thing2: 'chair' });
+expect(whatIsTabletoB.escaped).toEqual('what is a table to chair?');
+```
 
 ## Environment
 
