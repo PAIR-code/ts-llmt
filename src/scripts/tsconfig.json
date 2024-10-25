@@ -1,4 +1,5 @@
 {
+  // See: https://github.com/tsconfig/bases
   "extends": "@tsconfig/node18/tsconfig.json",
 
   // Most ts-node options can be specified here using their programmatic names.
@@ -16,22 +17,7 @@
       "esModuleInterop": true
     }
   },
-
   "compilerOptions": {
     // typescript options here
-    "declaration": true, // Generate .d.ts files from TypeScript and JavaScript files in your project.
-    "outDir": "./dist", // Specify an output folder for all emitted files.
-    "target": "ES2021",
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-  },
-
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "./src/scripts/**",
-    "./node_modules/**",
-    "./dist/**"
-  ]
+  }
 }

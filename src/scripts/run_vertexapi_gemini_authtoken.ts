@@ -1,34 +1,60 @@
-/**
- * @license SPDX-License-Identifier: Apache-2.0
- */
+/*==============================================================================
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache2 license that can be
+ * found in the LICENSE file and http://www.apache.org/licenses/LICENSE-2.0
+==============================================================================*/
 
-/* Test call to The Google-Cloud-Vertex-AI-API Palm2 LLM.
+/* Test call to The Google-Cloud-Vertex-AI-API Gemini LLM.
 
 Assumes: node is installed (you have the npx command).
 See https://github.com/nvm-sh/nvm
 
 Usage:
 
-npx ts-node --esm ./run_vertexapi_palm2_predict.ts \
+npx ts-node ./run_vertexapi_gemini_authtoken.ts \
   --project=$(gcloud config get-value project) \
   --accessToken=$(gcloud auth print-access-token) \
   --movie="The Untouchables"
 
 Assumes that you have run:
   gcloud config set project ${YOUR_GOOGLE_CLOUD_PROJECT_ID}
-*/
-import { VertexPalm2LLM } from "../llm_vertexapi_palm2";
-import { FewShotTemplate } from "../fewshot_template";
+  gcloud auth login
 
-import * as yargs from "yargs";
-import { nv, template } from "../template";
-import { fillTemplate } from "../llm";
-import { ErrorResponse } from "../simple_errors";
+You should then see something like: 
+
+```
+---- 0 ----
+I think you'll find the movie The Untouchables:
+
+* stylishly violent, a classic gangster film
+
+* a powerful and moving story of justice
+
+Do you like my summary?
+
+---- 1 ----
+...
+---- 3 ----
+...
+Do you like my summary?
+Success!
+```
+
+*/
+import { VertexGeminiLLM } from '../llm_vertexapi_gemini_1_5_authtoken';
+import { FewShotTemplate } from '../fewshot_template';
+
+import * as yargs from 'yargs';
+import { nv, template } from '../template';
+import { fillTemplate } from '../llm';
+import { isErrorResponse } from '../simple_errors';
 
 interface Params {
-  accessToken: string;
   project: string;
   movie: string;
+  accessToken: string;
 }
 
 function prettyMovieRec(
@@ -37,18 +63,18 @@ function prettyMovieRec(
   summaries: string
 ): string {
   const outputFormat = template`
----- ${nv("index")} ----
-I think you'll find the movie ${nv("movie")}:
+---- ${nv('index')} ----
+I think you'll find the movie ${nv('movie')}:
 
-${nv("bullets")}
+${nv('bullets')}
 
 Do you like my summary?`;
   const splitSummaries = summaries.split(`', '`).map((summaryPoint) => {
     return { summaryPoint };
   });
   const outputBullets = new FewShotTemplate(
-    template`* ${nv("summaryPoint")}`,
-    "\n\n"
+    template`* ${nv('summaryPoint')}`,
+    '\n\n'
   );
   const bullets = outputBullets.apply(splitSummaries).stringify();
   // Notice the nice type error is I try and and stringify, but forgot to
@@ -73,24 +99,24 @@ movie: 'Seven Samurai'
 summary: ['black and white masterpiece of cinematography', 'a slow, atmospheric, symbolic fight for all that is just']
 rating (1 to 5 scale): 5
 
-movie: '${nv("movie")}'
-summary: ['${nv("summaries")}']
-rating (1 to 5 scale): ${nv("rating", { match: "[12345](.\\d)?" })}
-synopsis: '${nv("synopsis")}'`;
+movie: '${nv('movie')}'
+summary: ['${nv('summaries')}']
+rating (1 to 5 scale): ${nv('rating', { match: '[12345](.\\d)?' })}
+synopsis: '${nv('synopsis')}'`;
 
-  const llm = new VertexPalm2LLM(args.project, args.accessToken);
+  const llm = new VertexGeminiLLM(args.project, args.accessToken, {
+    requestOptions: {
+      generationConfig: {
+        temperature: 1.0,
+        candidateCount: 4,
+      },
+    },
+  });
   const templateToFill = t.substs({ movie: args.movie });
-  const responsesOrError = await fillTemplate(llm, templateToFill);
-
-  if ("error" in responsesOrError) {
-    throw responsesOrError;
+  const responses = await fillTemplate(llm, templateToFill);
+  if (isErrorResponse(responses)) {
+    throw new Error(responses.error);
   }
-
-  const responses = responsesOrError as Exclude<
-    typeof responsesOrError,
-    ErrorResponse
-  >;
-
   const badlyFormedResponsesCount = responses.filter((r) => !r.substs).length;
   console.log(`badlyFormedResponses count: ${badlyFormedResponsesCount}`);
   console.log(`responses: ${JSON.stringify(responses, null, 2)} `);
@@ -104,32 +130,32 @@ synopsis: '${nv("synopsis")}'`;
 
 // ----------------------------------------------------------------------------
 const args = yargs
-  .option("accessToken", {
+  .option('accessToken', {
     describe:
-      "Google Cloud Auth Token " +
-      "e.g. echo $(gcloud auth print-access-token)",
+      'Google Cloud Auth Token ' +
+      'e.g. echo $(gcloud auth print-access-token)',
     demandOption: true,
-    type: "string",
+    type: 'string',
   })
-  .option("project", {
+  .option('project', {
     describe:
-      "The Google Cloud Project to use (it must have the VertexAI " +
-      "API enabled).",
+      'The Google Cloud Project to use (it must have the VertexAI ' +
+      'API enabled).',
     demandOption: true,
-    type: "string",
+    type: 'string',
   })
-  .option("movie", {
-    describe: "The name of a movie to get a review of",
+  .option('movie', {
+    describe: 'The name of a movie to get a review of',
     demandOption: true,
-    type: "string",
+    type: 'string',
   })
   .help().argv;
 
 run(args as Params)
   .then(() => {
-    console.log("Success!");
+    console.log('Success!');
   })
   .catch((e) => {
-    console.error("Failed: ", e);
-    throw Error("Failed");
+    console.error('Failed: ', e);
+    throw Error('Failed');
   });

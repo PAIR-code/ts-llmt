@@ -6,12 +6,12 @@
 Showing how the LLM class works...
 */
 
-import { assertNoErrorResponse, ErrorResponse } from "./simple_errors";
-import { LookupTableFakeLLM, ScoreResponse, fillTemplate } from "./llm";
-import { Palm2Response } from "./llm_vertexapi_palm2";
-import { nv, template } from "./template";
+import { assertNoErrorResponse, ErrorResponse } from './simple_errors';
+import { LookupTableFakeLLM, ScoreResponse, fillTemplate } from './llm';
+import { GeminiValidResponse } from './llm_vertexapi_gemini_lib';
+import { nv, template } from './template';
 
-describe("llm", () => {
+describe('llm', () => {
   let fakeLLM: LookupTableFakeLLM;
   const stopString = `']`;
 
@@ -49,25 +49,25 @@ summary: ['`;
     const request = preparePalm2Request(prompt);
     const response = await sendPalm2Request(..., request)
     */
-    function makeFakeResponse(responses: string[]): Palm2Response {
+    function makeFakeResponse(responses: string[]): GeminiValidResponse {
       return {
-        predictions: responses.map((s) => ({
-          content: s,
-          citationMetadata: { citations: [] },
-          safetyAttributes: { scores: [], blocked: false, categories: [] },
+        candidates: responses.map((s) => ({
+          content: { role: 'model', parts: [{ text: s }] },
+          finishReason: 'STOP',
+          avgLogprobs: 0.4,
         })),
-        metadata: {
-          tokenMetadata: {
-            outputTokenCount: { totalBillableCharacters: 279, totalTokens: 65 },
-            inputTokenCount: { totalBillableCharacters: 410, totalTokens: 118 },
-          },
+        usageMetadata: {
+          promptTokenCount: 10,
+          candidatesTokenCount: 20,
+          totalTokenCount: 30,
         },
+        modelVersion: 'fake model-002',
       };
     }
 
     const fakeResponse1 = makeFakeResponse(
       [
-        "an operatic tale of a powerful family",
+        'an operatic tale of a powerful family',
         "an operatic tragedy about a powerful Italian American crime family', 'a sprawling epic of violence and betrayal",
         "epic crime saga with iconic performances', 'an operatic tale of family, loyalty, and betrayal",
         "a timeless mafia masterpiece', 'an operatic tale of a family\\'s descent into darkness",
@@ -84,11 +84,23 @@ summary: ['`;
 
     function makeScoredCompletions(
       query: string,
-      response: Palm2Response
+      response: GeminiValidResponse
     ): ScoreResponse {
       return {
-        scoredCompletions: response.predictions.map((p) => {
-          return { query, completion: p.content, score: 0 };
+        scoredCompletions: response.candidates.map((p) => {
+          return {
+            query,
+            completion: p.content.parts
+              .map((p) => {
+                if ('text' in p) {
+                  return p.text;
+                } else {
+                  return 'unknown part';
+                }
+              })
+              .join(' <partsep> '),
+            score: 0,
+          };
         }),
       };
     }
@@ -108,7 +120,7 @@ summary: ['`;
   // ----------------------------------------------------------------------------
   // Now the tests really start...
   // ----------------------------------------------------------------------------
-  it("llm template filling", async () => {
+  it('llm template filling', async () => {
     const promptTempl = template`.
 The following are short movie summaries. They are specific, not generic (no movie is  just "a classic"), and they don't contain plot synopsis. They just describe my experience of the movie.
 
@@ -118,12 +130,12 @@ summary: ['a joyous sci fi that emerses you in a colourful universe', 'quirky up
 movie: 'Seven Samurai'
 summary: ['a black and white masterpiece of cinematography', 'a slow, atmospheric, symbolic fight for all that is just']
 
-movie: '${nv("movie")}'
-summary: ['${nv("summary")}']`;
+movie: '${nv('movie')}'
+summary: ['${nv('summary')}']`;
 
     const substsListOrError = await fillTemplate(
       fakeLLM,
-      promptTempl.substs({ movie: "The Godfather" })
+      promptTempl.substs({ movie: 'The Godfather' })
     );
 
     assertNoErrorResponse(substsListOrError);
@@ -151,8 +163,8 @@ summary: ['${nv("summary")}']`;
   // ----------------------------------------------------------------------------
   // Now the tests really start...
   // ----------------------------------------------------------------------------
-  it("llm template filling with custom regexp", async () => {
-    const movie = "The Untouchables";
+  it('llm template filling with custom regexp', async () => {
+    const movie = 'The Untouchables';
 
     const t = template`.
 The following are short movie summaries. They are specific, not generic (no movie is just "a classic"), and they don't contain plot synopsis. They just describe the experience of watching the movie. It tries to tell you the essence of the movie.
@@ -165,10 +177,10 @@ movie: 'Seven Samurai'
 summary: ['black and white masterpiece of cinematography', 'a slow, atmospheric, symbolic fight for all that is just']
 rating (1 to 5 scale): 5
 
-movie: '${nv("movie")}'
-summary: ['${nv("summaries")}']
-rating (1 to 5 scale): ${nv("rating", { match: "[12345](.\\d)?" })}
-synopsis: '${nv("synopsis")}'`;
+movie: '${nv('movie')}'
+summary: ['${nv('summaries')}']
+rating (1 to 5 scale): ${nv('rating', { match: '[12345](.\\d)?' })}
+synopsis: '${nv('synopsis')}'`;
 
     const responsesOrError = await fillTemplate(fakeLLM, t.substs({ movie }));
     assertNoErrorResponse(responsesOrError);

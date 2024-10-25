@@ -5,6 +5,23 @@ support for Large Language Model Templates. The key idea being explored is that
 templates have a type that corresponds to the names of the variables within the
 template.
 
+For example:
+
+```ts
+const thingVar = nv("thing");
+const thing2Var = nv("thing2");
+const whatIsAtoB = template`what is a ${thingVar} to ${thing2Var}?`;
+
+const whatIsTabletoB = whatIsAtoB.vars.thing.substStr("table");
+
+expect(whatIsTabletoB.escaped).toEqual("what is a table to {{thing2}}?");
+```
+
+A nice feature of this is that you get as "as-you-type" error checking, and
+arguments can be auto-completed by the IDE. e.g. you can directly reference the
+variables from the 'vars' parameter of a template, and anything else is an
+as-you-type error in your editor.
+
 ## Environment
 
 To set up your environment for development, first run `npm clean-install` to
