@@ -1,6 +1,6 @@
 {
   "name": "ts-llmt",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Experimental TypeScript library for Large Language Model Templates",
   "main": "index.js",
   "scripts": {
