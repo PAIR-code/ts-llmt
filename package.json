@@ -1,12 +1,11 @@
 {
   "name": "ts-llmt",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Experimental TypeScript library for Large Language Model Templates",
   "main": "index.js",
   "scripts": {
     "build": "tsc -p .",
     "build:dry-run": "tsc --noEmit",
-    "check-licenses": "check-license-header check --config .github/license-check/license-config.json --strict",
     "clean": "rimraf ./dist && mkdir dist",
     "lint": "eslint ./src",
     "prettier:check": "prettier --check '**/*.{js,ts}'",
@@ -15,7 +14,7 @@
     "test:ci": "jest --testTimeout=15000",
     "test:dev": "jest --watchAll --coverage",
     "test:trace": "node --trace-warnings node_modules/.bin/jest --maxWorkers=1 --no-cache --verbose",
-    "premerge": "npm run check-licenses && npm run lint && npm run prettier:check && npm run build && npm run test:trace"
+    "premerge": "npm run lint && npm run prettier:check && npm run build && npm run test:trace"
   },
   "repository": {
     "type": "git",
@@ -44,8 +43,8 @@
     "@tsconfig/node18": "18.2.4",
     "@types/jest": "29.5.12",
     "@types/underscore": "1.11.15",
-    "check-license-header": "github:viperproject/check-license-header#v2",
     "eslint": "8.57.0",
+    "eslint-plugin-license-header": "^0.6.1",
     "google-auth-library": "^9.14.2",
     "prettier": "3.2.5",
     "rimraf": "5.0.7",
