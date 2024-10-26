@@ -18,17 +18,6 @@ limitations under the License.
 import { Template, template, nv, matchTemplate } from './template';
 import { FewShotTemplate, matchFewShotTemplate } from './fewshot_template';
 
-// // ----------------------------------------------------------------------------
-// const movieSuggestionPrompt: Template<never> = template``;
-
-// Idea: flow graphs: track the graph of substs.
-
-// Idea: treat lists as first class objects where the template bunches a set of
-// vars, and knows how to seprate repetitions of them.
-
-// Idea: abstraction: generate a variable (have a stopping condition as first
-// class entity.
-
 describe('fewshot_template', () => {
   beforeEach(() => {});
 
@@ -126,7 +115,7 @@ Evaluation: "{{evaluation}}"`
     const nCriticExamplesTempl = new FewShotTemplate(movieRecEvalTempl, '\n\n');
 
     // ----------------------------------------------------------------------------
-    // Templates can contain other templates inline also.
+    // Tenplates can contain other templates inline also.
     const criticTempl = template`Given the following criteria for movie recommendations:
 ${nv('Constitution')}
 
@@ -135,7 +124,7 @@ If the review is ok, the evaluation should just be "ok".
 
 ${nv('fewShotCriticExamples')}
 
-${movieRecTempl as Template<string>}
+${movieRecTempl}
 Evaluation: "`;
 
     const criticWithConstitutionAndExamples = criticTempl.substs({
@@ -168,9 +157,7 @@ Evaluation: "`
   });
 
   it('parts template matching with multi-line match-string', () => {
-    const itemExperienceTempl = template`Short experience description: "${nv(
-      'experience'
-    )}"
+    const itemExperienceTempl = template`Short experience description: "${nv('experience')}"
 About: ${nv('aboutEntity')} (${nv('aboutDetails')})
 Liked or Disliked: ${nv('likedOrDisliked')}, because:
 [

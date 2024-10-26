@@ -505,13 +505,14 @@ type TemplateArgName<T> = T extends
  */
 export function template<
   // Hs extends string
-  Args extends (NamedVar<string> | Template<string> | string)[],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Args extends (NamedVar<any> | Template<any> | string)[],
 >(
   strings: TemplateStringsArray,
   // ...args: TemplateArg[]
   ...args: Args
-): // (NamedVar<Hs> | Template<Hs> | string)[]
-Template<TemplateArgName<(typeof args)[number]>> {
+  // (NamedVar<Hs> | Template<Hs> | string)[]
+): Template<TemplateArgName<(typeof args)[number]>> {
   const varSet = new Set<TemplateArgName<(typeof args)[number]>>();
   args.forEach((a) => {
     if (a instanceof String || typeof a === 'string') {
@@ -519,7 +520,7 @@ Template<TemplateArgName<(typeof args)[number]>> {
     }
     if (a instanceof Template) {
       a.varList().forEach((v) =>
-        varSet.add(v as unknown as TemplateArgName<(typeof args)[number]>)
+        varSet.add(v as TemplateArgName<(typeof args)[number]>)
       );
     }
     // TODO: support raw strings?
@@ -527,7 +528,7 @@ Template<TemplateArgName<(typeof args)[number]>> {
     //   varSet.add(a)
     // }
     else if (a instanceof NamedVar) {
-      varSet.add(a as unknown as TemplateArgName<(typeof args)[number]>);
+      varSet.add(a as TemplateArgName<(typeof args)[number]>);
     }
   });
 
@@ -548,6 +549,6 @@ Template<TemplateArgName<(typeof args)[number]>> {
         );
       })
       .join(''),
-    [...varSet] as unknown as NamedVar<TemplateArgName<Args[number]>>[]
+    [...varSet]
   );
 }
