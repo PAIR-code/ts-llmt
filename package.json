@@ -15,7 +15,7 @@
     "test:ci": "jest --testTimeout=15000",
     "test:dev": "jest --watchAll --coverage",
     "test:trace": "node --trace-warnings node_modules/.bin/jest --maxWorkers=1 --no-cache --verbose",
-    "premerge": "npm run build && npm run test:trace && npm run lint && npm run prettier:check"
+    "premerge": "npm run check-licenses && npm run lint && npm run prettier:check && npm run build && npm run test:trace"
   },
   "repository": {
     "type": "git",

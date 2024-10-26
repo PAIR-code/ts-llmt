@@ -24,11 +24,13 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "lts/*"
+          node-version: 'lts/*'
       - name: Install dependencies
         run: npm clean-install
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
+      - name: Check license headers
+        uses: viperproject/check-license-header@v2
       - name: Check code style
         run: npm run prettier:check
       - name: Lint
@@ -39,11 +41,9 @@ jobs:
         run: npm run clean
       - name: Build
         run: npm run build
-      - name: Check license headers
-        uses: viperproject/check-license-header@v2
         with:
-          path: "./"
-          config: "./.github/license-check/license-config.json"
+          path: './'
+          config: './.github/license-check/license-config.json'
           strict: true
       # - name: Package  # There is not any special packaging right now
       #   run: npm run package
