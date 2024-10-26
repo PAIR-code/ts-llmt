@@ -1,7 +1,7 @@
 # TypeScript Large Language Model Templates (TS-LLMT)
 
-[![Build Status](https://github.com/semantic-release/commit-analyzer/workflows/Test/badge.svg)](https://github.com/PAIR-code/ts-llmt/actions/workflows/release_workflow.yaml)
-[![npm latest version](https://img.shields.io/npm/v/@semantic-release/commit-analyzer/latest.svg)](https://www.npmjs.com/package/ts-llmt)
+[![Build Status](https://github.com/PAIR-code/ts-llmt/actions/workflows/release_workflow.yaml/badge.svg)](https://github.com/PAIR-code/ts-llmt/actions/workflows/release_workflow.yaml)
+[![npm latest version](https://img.shields.io/npm/v/ts-llmt/latest.svg)](https://www.npmjs.com/package/ts-llmt)
 
 This repository holds experimental code aimed at providing native TypeScript
 support for Large Language Model Templates. The key idea being explored is that
