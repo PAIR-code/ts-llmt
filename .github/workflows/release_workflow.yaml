@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
+          node-version: "lts/*"
       - name: Install dependencies
         run: npm clean-install
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
@@ -42,11 +42,11 @@ jobs:
       - name: Check license headers
         uses: viperproject/check-license-header@v2
         with:
-          path: './'
-          config: './.github/license-check/license-config.json'
+          path: "./"
+          config: "./.github/license-check/license-config.json"
           strict: true
-      - name: Package
-        run: npm run package
+      # - name: Package  # There is not any special packaging right now
+      #   run: npm run package
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
