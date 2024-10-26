@@ -10,6 +10,7 @@ on:
 jobs:
   release:
     name: Release
+    environment: Semantic Release to NPM environment
     runs-on: ubuntu-latest
     permissions:
       contents: write # To publish a GitHub release.
