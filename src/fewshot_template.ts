@@ -30,6 +30,29 @@ const nameDescriptionTempl = new FewShotTempl(template
 
 See the test file (.spec) for more detailed examples.
 */
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an Apache2 license that can be
+ * found in the LICENSE file and http://www.apache.org/licenses/LICENSE-2.0
+==============================================================================*/
+
+/*
+A few shot template class. This allows separating the template from the list of
+values that get subsituted int it.
+
+The implementation is very simple: few shot templates are treated as templates
+concatendated by a join string.
+
+For example:
+
+const nameDescriptionTempl = new FewShotTempl(template
+  `${namedVar('n')}, can be described in detail by: ${namedVar('d')}`,
+  '\n');
+
+See the test file (.spec) for more detailed examples.
+*/
 
 import { flatten } from 'underscore';
 import {
@@ -106,3 +129,14 @@ export function matchFewShotTemplate<Ns extends string>(
   }
   return matches;
 }
+
+// function apply2<Ns extends string, Ms extends Ns>(
+//   a: Set<Ns>,
+//   bmap: { [Key in Ms]: string }[]
+// ): Set<Exclude<Ns, Ms>> {
+//   const a2 = new Set<Exclude<Ns, Ms>>(a as any);
+//   Object.keys(bmap).forEach((n) => a2.delete(n as any));
+//   return a2;
+// }
+
+// const r2 = apply2(new Set(['a', 'b', 'c']), [{ a: 'a', b: 'b' }]);
