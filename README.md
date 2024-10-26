@@ -86,3 +86,16 @@ following:
 NOTE: If you're using Visual Studio Code, the [Prettier
 extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 will apply code style on save.
+
+## Releasing, Github Actions, and publishing to NPM
+
+The [`.release.json`](.release.json) file contains configuration information for the [semantic-release](https://github.com/semantic-release/semantic-release).
+
+```
+npx semantic-release
+```
+
+There are two github workflows defined in this project in:
+
+- `.github/workflows/dev_workflow.yaml`: triggered for every pull request
+- `.github/workflows/release_workflow.yaml`: tiggered on every merge into the main branch (which is intended to indicate that we should be making a relase).
