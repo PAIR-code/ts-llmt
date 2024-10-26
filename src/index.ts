@@ -3,13 +3,12 @@ import {
   nv,
   Template,
   TemplVar,
-  TemplateMatch,
   escapeStr,
   unEscapeStr,
   matchTemplate,
-} from "./template";
-import { FewShotTemplate, matchFewShotTemplate } from "./fewshot_template";
-import { NamedVar } from "./variable";
+} from './template';
+import { FewShotTemplate, matchFewShotTemplate } from './fewshot_template';
+import { NamedVar } from './variable';
 
 export = {
   Template,
