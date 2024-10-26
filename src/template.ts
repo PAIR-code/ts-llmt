@@ -56,7 +56,7 @@ import {
   NamedVar,
   SPLIT_REGEXP,
   RegExpVarOptions,
-} from "./variable";
+} from './variable';
 
 // ----------------------------------------------------------------------------
 // Escaping
@@ -66,12 +66,12 @@ import {
 // escaping: blah \ {{ foo... ===> blah \\ \{\{ foo...
 // unescaping: blah \\ \{\{ foo... ===> blah \ {{ foo...
 export function escapeStr(s: string): string {
-  return s.replaceAll("\\", "\\\\").replaceAll("{", "\\{");
+  return s.replaceAll('\\', '\\\\').replaceAll('{', '\\{');
   // Can be done in a single pass... TODO: test sure faster...
   // return s.replaceAll(/\\|\{/g, (m:string) => `\\${m}`);
 }
 export function unEscapeStr(s: string): string {
-  return s.replaceAll("\\\\", "\\").replaceAll("\\{", "{");
+  return s.replaceAll('\\\\', '\\').replaceAll('\\{', '{');
 }
 
 export function nv<N extends string>(
@@ -102,12 +102,12 @@ export interface TemplateParts<Ns extends string> {
 // Escape a string so that it can be matched literally in a regexp expression.
 // "$&" is the matched string. i.e. the character we need to escape.
 export function escapeStringInMatch(s: string) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 // $$ is the results in writing out $, so $$$$ ends up as "$$" in the final
 // string. e.g. $ ==> $$
 export function escapeStringInReplacement(s: string) {
-  return s.replace(/\$/g, "$$$$");
+  return s.replace(/\$/g, '$$$$');
 }
 
 export interface TemplateMatch<Ns extends string> {
@@ -145,7 +145,7 @@ export function matchTemplate<Ns extends string>(
     matchedPartsCount: 0,
     finalStr: strToMatch,
   };
-  parts.variables.forEach((v) => (match.substs[v.variable.name] = ""));
+  parts.variables.forEach((v) => (match.substs[v.variable.name] = ''));
   // const substs = {} as { [Key in Ns]: string };
 
   if (matchPrefix) {
@@ -164,9 +164,9 @@ export function matchTemplate<Ns extends string>(
 
     // If the var is the last thing in the template, then the whole response
     // is the variable.
-    if (v.postfix === "") {
+    if (v.postfix === '') {
       match.substs[v.variable.name] = match.finalStr;
-      match.finalStr = "";
+      match.finalStr = '';
     }
 
     if (match.finalStr.length === 0) {
@@ -174,7 +174,7 @@ export function matchTemplate<Ns extends string>(
     }
 
     if (!v.variable.contentMatchStr) {
-      if (v.postfix !== "") {
+      if (v.postfix !== '') {
         // Match variable as free text, and require postfix or EOS to indicate
         // variable end.
         //
@@ -182,7 +182,7 @@ export function matchTemplate<Ns extends string>(
         // doesn't match newlines).
         const varAndPostfixRegexp = new RegExp(
           `^(.+?)(${escapeStringInMatch(v.postfix)}|$)`,
-          "s"
+          's'
         );
         const varAndPostfixMatch = match.finalStr.match(varAndPostfixRegexp);
 
@@ -212,7 +212,7 @@ export function matchTemplate<Ns extends string>(
         match.substs[v.variable.name] = varMatch[1];
         match.finalStr = match.finalStr.slice(varMatch[0].length);
       }
-      if (v.postfix !== "") {
+      if (v.postfix !== '') {
         const postfixRegexp = new RegExp(escapeStringInMatch(v.postfix));
         const postfixMatch = match.finalStr.match(postfixRegexp);
         if (!postfixMatch) {
@@ -323,7 +323,7 @@ export class Template<Ns extends string> {
     vars: NamedVar<Ns>[]
   ) {
     const varsNamesInTemplate = [...escaped.matchAll(VAR_REGEXP)].map(
-      (m) => m.groups!["name"]
+      (m) => m.groups!['name']
     );
 
     this.vars = {} as NameToVarMap<Ns>;
@@ -414,7 +414,7 @@ export class Template<Ns extends string> {
     let newTempl = this as unknown as Return;
     for (const k of Object.keys(replacements) as S[]) {
       const r = replacements[k];
-      if (typeof r === "string") {
+      if (typeof r === 'string') {
         newTempl = (newTempl as unknown as Template<Ns>).vars[k].substStr(
           r
         ) as Return;
@@ -501,7 +501,7 @@ export function template<
 Template<TemplateArgName<(typeof args)[number]>> {
   const varSet = new Set<TemplateArgName<(typeof args)[number]>>();
   args.forEach((a) => {
-    if (a instanceof String || typeof a === "string") {
+    if (a instanceof String || typeof a === 'string') {
       return;
     }
     if (a instanceof Template) {
@@ -529,12 +529,12 @@ Template<TemplateArgName<(typeof args)[number]>> {
           escapeStr(s) +
           (a instanceof Template
             ? a.escaped
-            : a instanceof String || typeof a === "string"
+            : a instanceof String || typeof a === 'string'
               ? a
               : (a as NamedVar<string>).literal)
         );
       })
-      .join(""),
+      .join(''),
     [...varSet] as unknown as NamedVar<TemplateArgName<Args[number]>>[]
   );
 }

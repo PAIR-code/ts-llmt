@@ -2,8 +2,8 @@
  * @license SPDX-License-Identifier: Apache-2.0
  */
 
-import { template, nv, Template } from "../template";
-import { FewShotTemplate } from "../fewshot_template";
+import { template, nv, Template } from '../template';
+import { FewShotTemplate } from '../fewshot_template';
 
 interface Experience {
   experience: string;
@@ -21,28 +21,28 @@ interface ExperienceTemplEntry {
 
 export const characteristicsTempl = new FewShotTemplate(
   template`<like-or-dislike-phrase>${nv(
-    "characteristic"
+    'characteristic'
   )}</like-or-dislike-phrase>`,
-  "\n  "
+  '\n  '
 );
 
 const criteriaPoints: Experience[] = [
   {
-    experience: "Parc des Buttes Chaumont: love it.",
-    aboutEntity: "Parc des Buttes Chaumont",
-    likedOrDisliked: "Liked",
+    experience: 'Parc des Buttes Chaumont: love it.',
+    aboutEntity: 'Parc des Buttes Chaumont',
+    likedOrDisliked: 'Liked',
     characteristics: [
-      "Peaceful",
-      "Tons of old growth trees and benches",
-      "Great for walking, jogging, picnic, or just sitting and relaxing",
-      "Like a mini version of Central Park in New York",
+      'Peaceful',
+      'Tons of old growth trees and benches',
+      'Great for walking, jogging, picnic, or just sitting and relaxing',
+      'Like a mini version of Central Park in New York',
     ],
   },
   {
-    experience: "Spirited Away: breathtakingly beautiful.",
-    aboutEntity: "Spirited Away",
-    likedOrDisliked: "Liked",
-    characteristics: ["Visually stunning", "Great story", "Heartwarming"],
+    experience: 'Spirited Away: breathtakingly beautiful.',
+    aboutEntity: 'Spirited Away',
+    likedOrDisliked: 'Liked',
+    characteristics: ['Visually stunning', 'Great story', 'Heartwarming'],
   },
 ];
 
@@ -64,19 +64,19 @@ const experienceTemplEntries: ExperienceTemplEntry[] = criteriaPoints.map(
 );
 
 const itemExperienceTempl = template`<short-experience-description>${nv(
-  "experience"
+  'experience'
 )}</short-experience-description>
-<entity-name>${nv("aboutEntity")}</entity-name>
-<liked-or-disliked>${nv("likedOrDisliked")}</liked-or-disliked>
+<entity-name>${nv('aboutEntity')}</entity-name>
+<liked-or-disliked>${nv('likedOrDisliked')}</liked-or-disliked>
 <what-there-is-to-like-or-dislike-about-entity>
-  ${nv("characteristics")}
+  ${nv('characteristics')}
 </what-there-is-to-like-or-dislike-about-entity>`;
 
-const itemExperiencesTempl = new FewShotTemplate(itemExperienceTempl, "\n\n");
+const itemExperiencesTempl = new FewShotTemplate(itemExperienceTempl, '\n\n');
 
 const itemInterpreterTempl = template`Given a short description of an experience, identify what it is about (write "Entity: and name the thing being written about (and give some details about what kind of thing it is, e.g. movie by director name)"). If the author likes it (write "Liked") or not (write "Disliked"), and then list the key characteristics that might be why they liked or disliked it.
 
-${nv("pastExperiences")}
+${nv('pastExperiences')}
 
 ${itemExperienceTempl as Template<string>}`;
 

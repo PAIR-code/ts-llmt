@@ -5,8 +5,8 @@
 /*
 An class to wrap, and provide a common interface for LLM behaviour.
 */
-import { LLM, PredictResponse } from "./llm";
-import { ErrorResponse } from "./simple_errors";
+import { LLM, PredictResponse } from './llm';
+import { ErrorResponse } from './simple_errors';
 
 export interface LlmOptions {
   modelId?: string; // e.g. text-bison
@@ -28,14 +28,14 @@ async function sendLlmRequest(
 ): Promise<PredictResponse | ErrorResponse> {
   // Default options are marked with *
   const response = await fetch(`/api/llm`, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    mode: "cors", // no-cors, *cors, same-origin
-    credentials: "same-origin", // include, *same-origin, omit
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, *cors, same-origin
+    credentials: 'same-origin', // include, *same-origin, omit
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
-    redirect: "follow", // manual, *follow, error
-    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     body: JSON.stringify(request), // body data type must match "Content-Type" header
   });
   console.log(response);
@@ -48,7 +48,7 @@ async function sendLlmRequest(
   try {
     prediction = (await response.json()) as PredictResponse;
   } catch (err) {
-    console.error("invalid json in response.body: ", response.body);
+    console.error('invalid json in response.body: ', response.body);
     return {
       error: `response is not valid JSON.`,
     };

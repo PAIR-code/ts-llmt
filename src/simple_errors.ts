@@ -26,6 +26,6 @@ export function assertNoErrorResponse<T, E extends AbstractErrorResponse>(
   response: T | E
 ): asserts response is T {
   if ((response as E).error) {
-    throw new Error("response was an error after all");
+    throw new Error('response was an error after all');
   }
 }
