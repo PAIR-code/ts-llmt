@@ -1,0 +1,54 @@
+# Release from main branch workflow.
+
+name: Main branch check, build and release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # To publish a GitHub release.
+      issues: write # To comment on released issues.
+      pull-requests: write # To comment on released pull requests.
+      id-token: write # To enable use of OIDC for npm provenance.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+      - name: Install dependencies
+        run: npm clean-install
+      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+        run: npm audit signatures
+      - name: Check license headers
+        uses: viperproject/check-license-header@v2
+      - name: Check code style
+        run: npm run prettier:check
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test:ci
+      - name: Clean dist/
+        run: npm run clean
+      - name: Build
+        run: npm run build
+        with:
+          path: './'
+          config: './.github/license-check/license-config.json'
+          strict: true
+      # - name: Package  # There is not any special packaging right now
+      #   run: npm run package
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release

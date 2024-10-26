@@ -1,10 +1,19 @@
 [
   {
-    "include": ["**/*.js", "**/*.ts"],
-    "exclude": ["coverage/**", "node_modules/**"],
+    "include": [
+      "**/*.js",
+      "**/*.ts"
+    ],
+    "exclude": [
+      "dist/**",
+      "coverage/**",
+      "node_modules/**"
+    ],
     "license": "./.github/license-check/header-Apache-2.0.txt"
   },
   {
-    "include": ["**"]
+    "include": [
+      "**"
+    ]
   }
 ]

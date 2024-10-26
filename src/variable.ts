@@ -58,8 +58,8 @@ export interface RegExpVarOptions {
 export const VAR_REGEXP_STR = `(\\{\\{[^(\\}\\})]*\\}\\})`;
 // export const SPLIT_REGEXP_STR = `\\{\\{(.*?)\\}\\}`;
 export const SPLIT_REGEXP_STR = `\\{\\{([^(\\}\\})]*)\\}\\}`;
-export const SPLIT_REGEXP = new RegExp(SPLIT_REGEXP_STR, "g");
-export const VAR_REGEXP = new RegExp(VAR_REGEXP_STR, "g");
+export const SPLIT_REGEXP = new RegExp(SPLIT_REGEXP_STR, 'g');
+export const VAR_REGEXP = new RegExp(VAR_REGEXP_STR, 'g');
 export const PREFIX_REGEXP = new RegExp(`$([^(\\{\\{)]*)`);
 
 export class RegExpVar<N extends string> extends NamedVar<N> {
@@ -87,7 +87,7 @@ export class RegExpVar<N extends string> extends NamedVar<N> {
     //}
     this.literal = `{{${this.name}}}`;
     // TODO: consider doing this automatically by escaling this.literal
-    this.literalRegExp = new RegExp(`\\{\\{${this.name}\\}\\}`, "g");
+    this.literalRegExp = new RegExp(`\\{\\{${this.name}\\}\\}`, 'g');
   }
 
   // static splitAllVars(s: string): string[] {

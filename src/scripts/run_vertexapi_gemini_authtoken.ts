@@ -1,10 +1,6 @@
-/*==============================================================================
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an Apache2 license that can be
- * found in the LICENSE file and http://www.apache.org/licenses/LICENSE-2.0
-==============================================================================*/
+/**
+ * @license SPDX-License-Identifier: Apache-2.0
+ */
 
 /* Test call to The Google-Cloud-Vertex-AI-API Gemini LLM.
 

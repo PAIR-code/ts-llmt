@@ -6,8 +6,8 @@
 An class to wrap, and provide a common interface for LLM behaviour.
 */
 
-import { ErrorResponse, isErrorResponse } from "./simple_errors";
-import { Template, matchTemplate } from "./template";
+import { ErrorResponse, isErrorResponse } from './simple_errors';
+import { Template, matchTemplate } from './template';
 
 export interface PredictResponse {
   completions: string[];
@@ -42,7 +42,7 @@ export abstract class LLM<Params extends object> {
 //
 // TODO: maybe good to provide a version that takes the same query and gives difference responses each time, e.g. using a random seed at constructor time.
 export class LookupTableFakeLLM implements LLM<object> {
-  public name: string = "fake: in memory lookup table";
+  public name: string = 'fake: in memory lookup table';
 
   constructor(public table: { [query: string]: ScoreResponse }) {}
 

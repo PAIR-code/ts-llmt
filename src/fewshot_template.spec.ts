@@ -2,8 +2,8 @@
  * @license SPDX-License-Identifier: Apache-2.0
  */
 
-import { Template, template, nv, matchTemplate } from "./template";
-import { FewShotTemplate, matchFewShotTemplate } from "./fewshot_template";
+import { Template, template, nv, matchTemplate } from './template';
+import { FewShotTemplate, matchFewShotTemplate } from './fewshot_template';
 
 // // ----------------------------------------------------------------------------
 // const movieSuggestionPrompt: Template<never> = template``;
@@ -16,29 +16,29 @@ import { FewShotTemplate, matchFewShotTemplate } from "./fewshot_template";
 // Idea: abstraction: generate a variable (have a stopping condition as first
 // class entity.
 
-describe("fewshot_template", () => {
+describe('fewshot_template', () => {
   beforeEach(() => {});
 
-  it("A mini walkthrough of why this is neat...", () => {
+  it('A mini walkthrough of why this is neat...', () => {
     // ----------------------------------------------------------------------------
     // ----------------------------------------------------------------------------
     const criteriaPoints = [
       {
-        name: "Concise",
-        description: "not waffley.",
+        name: 'Concise',
+        description: 'not waffley.',
       },
       {
-        name: "No synposes",
-        description: "do not give plot synopses.",
+        name: 'No synposes',
+        description: 'do not give plot synopses.',
       },
       {
-        name: "Specific",
+        name: 'Specific',
         description: 'not vague (i.e. not "an amazing movie.", "a classic.").',
       },
     ];
     const nCriteriaTempl = new FewShotTemplate(
-      template`(${nv("number")}) ${nv("name")}: ${nv("description")}`,
-      "\n"
+      template`(${nv('number')}) ${nv('name')}: ${nv('description')}`,
+      '\n'
     );
     const numberedCriteriaPoints = criteriaPoints.map((e, i) => {
       return { ...e, number: `${i + 1}` };
@@ -67,25 +67,25 @@ describe("fewshot_template", () => {
     // joining, e.g. ": " always separates the property from the value, and
     // "\n" always separates different property-vcalue pairs.
     const nPropertyValuePerLineTempl = new FewShotTemplate(
-      template`${nv("property")}: "${nv("value")}"`,
-      "\n"
+      template`${nv('property')}: "${nv('value')}"`,
+      '\n'
     );
     const movieAndRecList = [
       {
-        property: "Movie",
-        value: nv("movie"),
+        property: 'Movie',
+        value: nv('movie'),
       },
       {
-        property: "Recommendation",
-        value: nv("recommendation"),
+        property: 'Recommendation',
+        value: nv('recommendation'),
       },
     ];
     const movieRecTempl = nPropertyValuePerLineTempl.apply(movieAndRecList);
     const movieRecEvalTempl = nPropertyValuePerLineTempl.apply([
       ...movieAndRecList,
       {
-        property: "Evaluation",
-        value: nv("evaluation"),
+        property: 'Evaluation',
+        value: nv('evaluation'),
       },
     ]);
 
@@ -98,29 +98,29 @@ Evaluation: "{{evaluation}}"`
     // ----------------------------------------------------------------------------
     const fewShotCriticExamples = [
       {
-        movie: "The Godfather",
-        recommendation: "a dark and violent story of family and power",
-        evaluation: "ok",
+        movie: 'The Godfather',
+        recommendation: 'a dark and violent story of family and power',
+        evaluation: 'ok',
       },
       {
-        movie: "The Godfather",
-        recommendation: "a masterpiece of cinema",
+        movie: 'The Godfather',
+        recommendation: 'a masterpiece of cinema',
         evaluation:
-          "Specific: the recommendation is vague, it should be more precise.",
+          'Specific: the recommendation is vague, it should be more precise.',
       },
     ];
 
-    const nCriticExamplesTempl = new FewShotTemplate(movieRecEvalTempl, "\n\n");
+    const nCriticExamplesTempl = new FewShotTemplate(movieRecEvalTempl, '\n\n');
 
     // ----------------------------------------------------------------------------
     // Templates can contain other templates inline also.
     const criticTempl = template`Given the following criteria for movie recommendations:
-${nv("Constitution")}
+${nv('Constitution')}
 
 Evaluate the following movie recommendations.
 If the review is ok, the evaluation should just be "ok".
 
-${nv("fewShotCriticExamples")}
+${nv('fewShotCriticExamples')}
 
 ${movieRecTempl as Template<string>}
 Evaluation: "`;
@@ -154,18 +154,18 @@ Evaluation: "`
     );
   });
 
-  it("parts template matching with multi-line match-string", () => {
+  it('parts template matching with multi-line match-string', () => {
     const itemExperienceTempl = template`Short experience description: "${nv(
-      "experience"
+      'experience'
     )}"
-About: ${nv("aboutEntity")} (${nv("aboutDetails")})
-Liked or Disliked: ${nv("likedOrDisliked")}, because:
+About: ${nv('aboutEntity')} (${nv('aboutDetails')})
+Liked or Disliked: ${nv('likedOrDisliked')}, because:
 [
-  ${nv("characteristics")}
+  ${nv('characteristics')}
 ]`;
 
     const t = itemExperienceTempl.substs({
-      experience: "The Garden of Forking Paths: like it",
+      experience: 'The Garden of Forking Paths: like it',
     });
 
     const parts = t.parts();
@@ -173,18 +173,18 @@ Liked or Disliked: ${nv("likedOrDisliked")}, because:
       'The Garden of Forking Paths (short story by Jorge Luis Borges)\nLiked or Disliked: Liked, because:\n[\n  "Intriguing",\n  "Philosophical",\n  "Thought-provoking"\n]\n\nfoo foo\n]';
     const m1 = matchTemplate(parts, s1, false);
     expect(m1.substs).toEqual({
-      aboutEntity: "The Garden of Forking Paths",
-      aboutDetails: "short story by Jorge Luis Borges",
-      likedOrDisliked: "Liked",
+      aboutEntity: 'The Garden of Forking Paths',
+      aboutDetails: 'short story by Jorge Luis Borges',
+      likedOrDisliked: 'Liked',
       characteristics:
         '"Intriguing",\n  "Philosophical",\n  "Thought-provoking"',
     });
   });
 
-  it("match fewshot template", () => {
+  it('match fewshot template', () => {
     const templ = new FewShotTemplate(
-      template`(${nv("id")}) ${nv("property")}: "${nv("value")}"`,
-      "\n"
+      template`(${nv('id')}) ${nv('property')}: "${nv('value')}"`,
+      '\n'
     );
 
     const str = `(1) Concise: "not waffley"
@@ -194,20 +194,20 @@ Liked or Disliked: ${nv("likedOrDisliked")}, because:
     const m = matchFewShotTemplate(templ, str);
     expect(m.length).toEqual(3);
     expect(m[0].substs).toEqual({
-      id: "1",
-      property: "Concise",
-      value: "not waffley",
+      id: '1',
+      property: 'Concise',
+      value: 'not waffley',
     });
     expect(m[0].curPart).toEqual(undefined);
     expect(m[1].substs).toEqual({
-      id: "2",
-      property: "No synposes",
-      value: "do not give plot synopses",
+      id: '2',
+      property: 'No synposes',
+      value: 'do not give plot synopses',
     });
     expect(m[1].curPart).toEqual(undefined);
     expect(m[2].substs).toEqual({
-      id: "3",
-      property: "Specific",
+      id: '3',
+      property: 'Specific',
       value: "not vague (i.e. not 'an amazing movie.', 'a classic.')",
     });
     expect(m[2].curPart).toEqual(undefined);

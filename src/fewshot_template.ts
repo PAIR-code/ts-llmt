@@ -18,14 +18,14 @@ const nameDescriptionTempl = new FewShotTempl(template
 See the test file (.spec) for more detailed examples.
 */
 
-import { flatten } from "underscore";
+import { flatten } from 'underscore';
 import {
   Template,
   matchTemplate,
   TemplateMatch,
   escapeStringInMatch,
-} from "./template";
-import { NamedVar } from "./variable";
+} from './template';
+import { NamedVar } from './variable';
 
 // For each example substitution, substitute it into the template, and join it
 // all together with the joinStr, into one big new template.
@@ -37,7 +37,7 @@ export function fewShotSubst<N extends string, M extends N, N2s extends string>(
   const vars = flatten(
     examples.map((e) =>
       Object.values<string | NamedVar<N2s>>(e).filter(
-        (r) => typeof r !== "string"
+        (r) => typeof r !== 'string'
       )
     )
   ) as NamedVar<N2s>[];
@@ -77,7 +77,7 @@ export function matchFewShotTemplate<Ns extends string>(
   matches.push(match);
   while (
     match.matchedPartsCount === match.parts.variables.length &&
-    match.finalStr !== ""
+    match.finalStr !== ''
   ) {
     let nextStr = match.finalStr;
     const sepMatch = match.finalStr.match(
