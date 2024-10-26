@@ -28,6 +28,10 @@ jobs:
         run: npm audit signatures
       - name: Check license headers
         uses: viperproject/check-license-header@v2
+        with:
+          path: './'
+          config: './.github/license-check/license-config.json'
+          strict: true
       - name: Check code style
         run: npm run prettier:check
       - name: Lint
@@ -38,9 +42,5 @@ jobs:
         run: npm run clean
       - name: Build
         run: npm run build
-        with:
-          path: './'
-          config: './.github/license-check/license-config.json'
-          strict: true
       # - name: Package  # We don't current do any special packaging.
       #   run: npm run package
