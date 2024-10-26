@@ -30,29 +30,6 @@ const nameDescriptionTempl = new FewShotTempl(template
 
 See the test file (.spec) for more detailed examples.
 */
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an Apache2 license that can be
- * found in the LICENSE file and http://www.apache.org/licenses/LICENSE-2.0
-==============================================================================*/
-
-/*
-A few shot template class. This allows separating the template from the list of
-values that get subsituted int it.
-
-The implementation is very simple: few shot templates are treated as templates
-concatendated by a join string.
-
-For example:
-
-const nameDescriptionTempl = new FewShotTempl(template
-  `${namedVar('n')}, can be described in detail by: ${namedVar('d')}`,
-  '\n');
-
-See the test file (.spec) for more detailed examples.
-*/
 
 import { flatten } from 'underscore';
 import {
