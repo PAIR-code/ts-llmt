@@ -38,8 +38,15 @@ whatIsAtoB.substs({ thing: 'table', thing2: 'chair' });
 expect(whatIsTabletoB.escaped).toEqual('what is a table to a chair?');
 ```
 
+## License: Apache 2.0
+
+Source code for this library is released under the [Apache 2.0
+license](https://spdx.org/licenses/Apache-2.0.html). The full text of the
+Apache-2.0 license is available in the accompanying [`LICENSE.md`](./LICENSE.md)
+file.
+
 ## Contributing
 
-See the [CONTRIBUTING.md](./CONTRIBUTING.md) file for details of how to contribute, setup your
-environment, run tests, check license headers, style, and format your commit
-messages.
+See the [`CONTRIBUTING.md`](./CONTRIBUTING.md) file for details of how to
+contribute, setup your environment, run tests, check license headers, style, and
+format your commit messages.
