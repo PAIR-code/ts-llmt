@@ -40,6 +40,6 @@ expect(whatIsTabletoB.escaped).toEqual('what is a table to a chair?');
 
 ## Contributing
 
-See the [CONTRIBUTING.md] file for details of how to contribute, setup your
+See the [CONTRIBUTING.md](./CONTRIBUTING.md) file for details of how to contribute, setup your
 environment, run tests, check license headers, style, and format your commit
 messages.
