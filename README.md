@@ -11,13 +11,18 @@ template.
 For example:
 
 ```ts
+import { nv, template } from 'ts-llmt';
+
 const thingVar = nv('thing');
 const thing2Var = nv('thing2');
-const whatIsAtoB = template`what is a ${thingVar} to ${thing2Var}?`;
+// The type of `whatIsAtoB` is inferred to be `Template<"thing" | "thing2">`
+const whatIsAtoB = template`what is a ${thingVar} to a ${thing2Var}?`;
 
+// Replacing the thing variable give type:  `Template<"thing2">`
 const whatIsTabletoB = whatIsAtoB.vars.thing.substStr('table');
 
-expect(whatIsTabletoB.escaped).toEqual('what is a table to {{thing2}}?');
+// The escaped raw form of this template is as so:
+expect(whatIsTabletoB.escaped).toEqual('what is a table to a {{thing2}}?');
 ```
 
 A nice feature of this is that you get as "as-you-type" error checking, and
@@ -30,7 +35,7 @@ type-checking like so:
 
 ```ts
 whatIsAtoB.substs({ thing: 'table', thing2: 'chair' });
-expect(whatIsTabletoB.escaped).toEqual('what is a table to chair?');
+expect(whatIsTabletoB.escaped).toEqual('what is a table to a chair?');
 ```
 
 ## Environment
