@@ -12,8 +12,8 @@ time. This means:
 - You never need to debug an accidental subsitution for the wrong variable name.
 - You can substite for some variables but not others, in any order you like, and the remaining
   variables are tracked in the type.
-- You can subsitute templates with more holes into named-hole in a template, and you get the correct
-  remaining holes in the right places in the final template.
+- You can subsitute templates with more holes into a named-hole in a template, and you get the
+  correct remaining holes in the right places in the final template.
 - The same hole can appear in multiple places, subsitution substitutes it everywhere, as you would
   expect.
 - There is support for few-shot prompts (where you have some iterated template
