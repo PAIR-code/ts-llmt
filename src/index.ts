@@ -23,13 +23,16 @@ import {
   escapeStr,
   unEscapeStr,
   matchTemplate,
+  serialiseTemplate,
+  deserialiseTemplate,
 } from './template';
 import { FewShotTemplate, matchFewShotTemplate } from './fewshot_template';
-import { NamedVar } from './variable';
+import { NamedVar, RegExpVar } from './variable';
 
 export = {
   Template,
   NamedVar,
+  RegExpVar,
   TemplVar,
   escapeStr,
   template,
@@ -38,4 +41,6 @@ export = {
   matchTemplate,
   FewShotTemplate,
   matchFewShotTemplate,
+  serialiseTemplate,
+  deserialiseTemplate,
 };

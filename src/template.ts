@@ -63,7 +63,6 @@ allows parsing of outputs from an LLM to be well typed and know what variable
 will come next.
 
 */
-
 import {
   RegExpVar,
   NamedVar,
@@ -550,5 +549,24 @@ export function template<
       })
       .join(''),
     [...varSet]
+  );
+}
+
+// Serialization / Deserialization tools
+export type SerialisedTemplate = {
+  escaped: string;
+  vars: string[];
+};
+
+export function serialiseTemplate(templ: Template<string>): SerialisedTemplate {
+  return { vars: Object.keys(templ.vars), escaped: templ.escaped };
+}
+
+export function deserialiseTemplate<Ns extends string>(
+  serialised: SerialisedTemplate
+): Template<Ns> {
+  return new Template(
+    serialised.escaped,
+    serialised.vars.map((v) => new RegExpVar(v as Ns))
   );
 }
